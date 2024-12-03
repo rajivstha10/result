@@ -9,6 +9,8 @@ class AuthEvent extends Equatable {
 
 class InitialSignInEvent extends AuthEvent {}
 
+class InitialSignUpEvent extends AuthEvent {}
+
 ///
 class SignInUserEvent extends AuthEvent {
   ///
@@ -26,4 +28,38 @@ class SignInUserEvent extends AuthEvent {
 
   ///
   final bool rememberMe;
+}
+
+class SignUpUserEvent extends AuthEvent {
+  ///
+  SignUpUserEvent({
+    required this.email,
+    required this.password,
+    required this.symbolNumber,
+    required this.registrationNumber,
+    required this.profilePic,
+    required this.batchId,
+    required this.programId,
+  });
+
+  ///
+  final String email;
+
+  ///
+  final String password;
+
+  ///
+  final String symbolNumber;
+
+  ///
+  final String registrationNumber;
+
+  ///
+  File? profilePic;
+
+  ///
+  final int batchId;
+
+  ///
+  final int programId;
 }
