@@ -9,7 +9,7 @@ import 'package:result_e/app_router.dart';
 import 'package:result_e/core/extensions/app_theme_extensions.dart';
 import 'package:result_e/core/helper/snackbar_msg_helper.dart';
 import 'package:result_e/core/theme/colors.dart';
-import 'package:result_e/widgets/custom_dialog_boxe.dart';
+import 'package:result_e/widgets/custom_dialog_box.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///

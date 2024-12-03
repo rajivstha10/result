@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 // base url DEV
-const String baseURL = '';//'http://192.168.0.104:3000/api/';
+const String baseURL = 'http://10.0.2.2:8080/';
 
 
 

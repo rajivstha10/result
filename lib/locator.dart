@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:result_e/app_router.dart';
 import 'package:result_e/core/helper/secure_storage_helper.dart';
+import 'package:result_e/features/auth/bloc/auth_bloc.dart';
 import 'package:result_e/features/auth/cubit/auth_cubit.dart';
 import 'package:result_e/features/onboarding/cubit/onboarding_cubit.dart';
 
@@ -28,9 +29,9 @@ Future<void> init() async {
     AuthCubit.new,
   );
 
-  // locator.registerFactory(
-  //   () => AuthBloc(authRepository: locator(), secureStorageHelper: locator()),
-  // );
+  locator.registerFactory(
+    () => AuthBloc(authRepository: locator(), secureStorageHelper: locator()),
+  );
 
   /// Route
   locator
@@ -47,9 +48,9 @@ Future<void> init() async {
     () => SecureStorageHelperImpl(flutterSecureStorage: locator()),
   );
 
-// /// External
-// final flutterSecureStorage = FlutterSecureStorage(
-//   aOptions: AndroidOptions(encryptedSharedPreferences: true),
-// );
-// locator.registerLazySingleton(() => flutterSecureStorage);
+  /// External
+  const flutterSecureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+  locator.registerLazySingleton(() => flutterSecureStorage);
 }

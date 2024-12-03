@@ -1,6 +1,7 @@
-import 'package:result_e/core/extensions/app_theme_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:result_e/core/extensions/app_theme_extensions.dart';
+import 'package:result_e/core/theme/colors.dart';
 
 ///
 class LabelDropdownWidget extends StatefulWidget {
@@ -10,6 +11,7 @@ class LabelDropdownWidget extends StatefulWidget {
     required this.hint,
     required this.items,
     required this.isLabelBold,
+    this.focusNode,
     this.showLabel = true,
     this.isExpanded = true,
     this.value,
@@ -43,6 +45,9 @@ class LabelDropdownWidget extends StatefulWidget {
   final void Function(String?)? onChanged;
 
   ///
+  final FocusNode? focusNode;
+
+  ///
   final VoidCallback? onDelete;
 
   @override
@@ -62,6 +67,7 @@ class _LabelDropdownWidgetState extends State<LabelDropdownWidget> {
               fontWeight:
                   widget.isLabelBold ? FontWeight.bold : FontWeight.normal,
               color: Colors.black,
+              fontSize: 13,
             ),
           ),
           const Gap(8),
@@ -73,7 +79,10 @@ class _LabelDropdownWidgetState extends State<LabelDropdownWidget> {
               .map(
                 (e) => DropdownMenuItem(
                   value: e,
-                  child: Text(e),
+                  child: Text(
+                    e,
+                    style: const TextStyle(color: midShadeColor),
+                  ),
                 ),
               )
               .toList(),
@@ -84,6 +93,8 @@ class _LabelDropdownWidgetState extends State<LabelDropdownWidget> {
             }
             return null;
           },
+          menuMaxHeight: 200,
+          focusNode: widget.focusNode,
           hint: Text(widget.hint),
           decoration: InputDecoration(
             border: const OutlineInputBorder(),

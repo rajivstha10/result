@@ -10,11 +10,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:result_e/app_router.dart';
 import 'package:result_e/core/extensions/app_theme_extensions.dart';
 import 'package:result_e/core/theme/colors.dart';
-import 'package:result_e/core/utils/program.dart';
 import 'package:result_e/features/auth/cubit/auth_cubit.dart';
 import 'package:result_e/features/auth/cubit/auth_cubit_state.dart';
 import 'package:result_e/features/auth/widget/auth_base_widget.dart';
 import 'package:result_e/widgets/custom_app_button.dart';
+import 'package:result_e/widgets/label_dropdown_widget.dart';
 import 'package:result_e/widgets/label_text_form_field.dart';
 
 ///
@@ -33,18 +33,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // TextEditingController userNameController = TextEditingController();
   TextEditingController symbolController = TextEditingController();
   TextEditingController registrationController = TextEditingController();
+  TextEditingController programIdController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   bool showProfileErrMessagge = false;
 
-  // String selectedProgramType =
-  //     ProgramType.first['code'].toString(); // Initial value
+  List<String> batchYears = List.generate(
+    30, // Number of years to display
+    (index) => (DateTime.now().year - index).toString(),
+  );
+
+  String? selectedBatchYear;
 
   //for focus node
   final emailFocusNode = FocusNode();
-  final nameFocusNode = FocusNode();
-  final phoneFocusNode = FocusNode();
-  final locationFocusNode = FocusNode();
+  final symbolFocusNode = FocusNode();
+  final registrationFocusNode = FocusNode();
+  final batchFocusNode = FocusNode();
+  final programFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final confirmPasswordFocusNode = FocusNode();
 
@@ -157,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      nameFocusNode.requestFocus();
+      emailFocusNode.requestFocus();
     });
   }
 
@@ -167,12 +173,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     symbolController.dispose();
     emailController.dispose();
     registrationController.dispose();
+    programIdController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
-    nameFocusNode.dispose();
-    phoneFocusNode.dispose();
     emailFocusNode.dispose();
-    locationFocusNode.dispose();
+    symbolFocusNode.dispose();
+    registrationFocusNode.dispose();
+    batchFocusNode.dispose();
+    programFocusNode.dispose();
     passwordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
     super.dispose();
@@ -269,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   const Gap(80),
                   Text(
-                    'Register to Royal Palm',
+                    'Register to Result E',
                     style: context.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
@@ -277,7 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const Gap(12),
                   Text(
-                    'We make it easy for everyone to invest in real estate.',
+                    'We make it easy for everyone to view their result Seamlessly.',
                     style: context.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: Colors.grey,
@@ -312,7 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusNode: emailFocusNode,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (p2) {
-                      FocusScope.of(context).requestFocus(locationFocusNode);
+                      FocusScope.of(context).requestFocus(symbolFocusNode);
                       return null;
                     },
                     // enabled: state.signInState != SignInState.loading,
@@ -325,10 +333,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     inputType: TextInputType.phone,
                     textFieldType: TextFieldType.phone,
                     hintText: 'Symbol No.',
-                    focusNode: phoneFocusNode,
+                    focusNode: symbolFocusNode,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (p1) {
-                      FocusScope.of(context).requestFocus(emailFocusNode);
+                      FocusScope.of(context)
+                          .requestFocus(registrationFocusNode);
                       return null;
                     },
                     // enabled: state.signInState != SignInState.loading,
@@ -340,7 +349,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     inputType: TextInputType.text,
                     textFieldType: TextFieldType.text,
                     hintText: 'Registration No.',
-                    focusNode: locationFocusNode,
+                    focusNode: registrationFocusNode,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (p3) {
+                      FocusScope.of(context).requestFocus(batchFocusNode);
+                      return null;
+                    },
+                    // enabled: state.signInState != SignInState.loading,
+                  ),
+                  const Gap(12),
+
+                  LabelDropdownWidget(
+                    label: 'Batch Year',
+                    hint: 'Select Batch Year',
+                    onChanged: (value) {
+                      setState(() {
+                        selectedBatchYear = value;
+                      });
+                      FocusScope.of(context).requestFocus(programFocusNode);
+                    },
+                    value: selectedBatchYear,
+                    items: batchYears,
+                    focusNode: batchFocusNode,
+                    isLabelBold: true,
+                  ),
+
+                  const Gap(12),
+                  LabelTextFormField(
+                    label: 'Program Id.',
+                    textEditingController: programIdController,
+                    inputType: TextInputType.text,
+                    textFieldType: TextFieldType.text,
+                    hintText: 'Program Id.',
+                    focusNode: programFocusNode,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (p3) {
                       FocusScope.of(context).requestFocus(passwordFocusNode);
@@ -428,27 +469,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (cubitState.profileImage == null) {
                           // First tap, open gallery
                           _showImageOptions(context);
-
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) {
-                          //     return const ImageOptionsDialog();
-                          //   },
-                          // );
                         } else {
                           // Second tap, show the selected image
                           _showProfileImageDialog(
                             context,
                             cubitState.profileImage,
                           );
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) {
-                          //     return ImageDialog(
-                          //       profileImage: profileImage!,
-                          //     );
-                          //   },
-                          // );
                         }
                       },
                       leading: const Gap(10),

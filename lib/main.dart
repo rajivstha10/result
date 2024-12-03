@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:result_e/app.dart';
+import 'package:result_e/core/helper/dio_helper.dart';
 import 'package:result_e/locator.dart';
 
 Future<void> main() async {
@@ -8,7 +9,7 @@ Future<void> main() async {
 
   /// DI
   await init();
-  // DioHelper.init();
+  DioHelper.init();
 
   // SystemChrome.setSystemUIOverlayStyle(
   //   const SystemUiOverlayStyle(
