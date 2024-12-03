@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
@@ -56,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                 'Data cleared from Storage: ${event.email}, ${event.password}',
               );
             }
-            
+
             emit(
               state.copyWith(
                 signInState: SignInState.success,
